@@ -13,6 +13,18 @@ const direction = document.querySelector(`#direction > p`);
 const visibility = document.querySelector(`#visibility > p`);
 const cloudiness = document.querySelector(`#cloudiness > p`);
 const pressure = document.querySelector(`#pressure > p`);
+const icons = {
+    2: "008-storm.svg",
+    3: "016-drizzle.svg",
+    5: "012-rain.svg",
+    6: "011-snowy.svg",
+    7: "015-fog.svg",
+    781: "014-twister.svg",
+    clearD : "010-sun.svg",
+    clearN : "005-night.svg",
+    cloudsD: "006-sunny.svg",
+    cloudsN: "007-night-1.svg"
+}
 
 const humanTime = (unix) => {
     const date = new Date(unix*1000);
@@ -21,8 +33,27 @@ const humanTime = (unix) => {
     return `${hour}:${minutes}`;
 }
 
+const degreeToCardinal = (degree) => {
+
+}
+
+const weatherIcon = (cod, icon) => {
+    if(cod===800&&icon==='d')
+        return icons.clearD;
+    if(cod===800&&icon==='n')
+        return icons.clearN;
+    if(cod>800&&icon==='d')
+        return icons.cloudsD;
+    if(cod>800&&icon==='n')
+        return icons.cloudsN;
+    if(cod===781)
+        return icons[781];
+    return icons[Math.floor(cod/100)];
+}
+
 fetch(url).then(result => result.json()).then(json => {
     city.textContent = `${json.name}, ${json.sys.country}`;
+    image.src = `icons/svg/${weatherIcon(json.weather[0].id, json.weather[0].icon[2])}`;
     description.textContent = json.weather[0].description;
     temperature.innerHTML = `${json.main.temp} &deg;C`;
     humidity.textContent = `${json.main.humidity}%`;
