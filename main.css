@@ -1,0 +1,97 @@
+body{
+    margin:0;
+    padding: 0;
+    height: 100vh;
+    background: black;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: grid;
+    grid-template-rows: 80px 1fr 100px;
+    overflow: hidden;
+}
+
+#description{
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+#details{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(5, 1fr);
+    grid-row-gap: 5px;
+}
+#details > div{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+    justify-items: center;
+}
+#details img{
+    width:  80%;
+    height: 80%;
+}
+#details p{
+    margin: 0;
+    font-size: 3vmin;
+}
+
+footer{
+    background-color: #133B5A;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+    text-align: center;
+    font-weight: bold;
+}
+footer #credits a{
+    color: #0078D7;
+    text-decoration: none;
+}
+
+#github-link{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    align-items: center;
+    grid-column-gap: 5px;
+    font-size: 20px;
+}
+
+header{
+    background-color: #133B5A;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+}
+
+#icon{
+    width: 20%;
+    height: 20%;
+}
+
+#location{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+section{
+    display: grid;
+    grid-template-columns: 30vw 60vw;
+    margin: 0 auto;
+    grid-column-gap: 50px;
+}
+#sunrise img, #sunset img{
+    width: 95%;
+    height: 100%;
+}
+
+#weather{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
