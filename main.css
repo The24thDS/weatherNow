@@ -7,13 +7,13 @@ body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: grid;
     grid-template-rows: 80px 1fr 100px;
-    /* overflow: hidden; */
 }
 
 #description{
     text-align: center;
     font-size: 3vmin;
     font-weight: bold;
+    user-select: none;
 }
 #details{
     display: grid;
@@ -45,6 +45,9 @@ footer{
     justify-content: center;
     text-align: center;
     font-weight: bold;
+}
+footer #credits p{
+    margin: 0
 }
 footer #credits a{
     color: #6cb0e7;
@@ -82,15 +85,48 @@ header{
     font-weight: bold;
 }
 
+#nope{
+    display: none;
+    grid-column: span 2;
+    justify-content: center;
+    align-items: center;
+}
+
 #poweredby{
     display: flex;
     justify-self: end;
+    align-items: center;
     font-size: 2vmin;
 }
 #poweredby img{
-    padding: 0 10px
+    padding: 0 10px;
+}
+#pressure{
+    grid-column: span 2;
+}
+#pressure p{
+    justify-self: start;
+}
+#pressure img{
+    justify-self: end;
+    width: 50%;
+    height: 50%;
 }
 
+.red{
+    color: red;
+}
+
+#searchbar{
+    width: 50%;
+    border: 2px solid rgba(0,0,0,.5);
+    padding: 5px;
+}
+#searchbar::before{
+    content: 's';
+    position: absolute;
+    color: black;
+}
 section{
     display: grid;
     grid-template-columns: 30vw 60vw;
@@ -100,6 +136,12 @@ section{
 #sunrise img, #sunset img{
     width: 95%;
     height: 100%;
+}
+
+#title{
+    justify-self: start;
+    font-size: 5vmin;
+    font-weight: bold;
 }
 
 #weather{
