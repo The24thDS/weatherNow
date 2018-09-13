@@ -9,7 +9,7 @@
 </head>
 <body>
     <header>
-        <div id="title">weatherNow</div>
+        <div id="title"><em>weatherNow</em></div>
         <input type="search" name="search" id="searchbar" placeholder="Search your city"/>
         <a id="github-link" href="https://github.com/The24thDS/weatherNow">
             <span> View on GitHub </span>
@@ -21,6 +21,7 @@
     <section>
     <div id="weather">
         <h2 id="location"></h2>
+        <h3 id="dt"></h3>
         <img id="icon" alt="weather-icon"/>
         <p id="description"></p>
         <div id="details">
@@ -60,12 +61,22 @@
                 <img alt="pressure" title="Atmospheric Pressure" src="icons/svg/017-pressure.svg"/>
                 <p></p>
             </div>
+            <div id="uv">
+                <img alt="uv index" title="UV Index" src="icons/svg/010-sun.svg"/>
+                <p></p>
+                <div id="info"></div>
+            </div>
         </div>
     </div>
-    <div id="nope">city not found</div>
+    <div id="nope" class="red">city not found</div>
     </section>
     <footer>
-        <div id="units"></div>
+        <div id="units">
+            <input type="radio" name="units" value="metric" id="metric" checked="checked"/>
+            <label for="metric">&deg;C</label>
+            <input type="radio" name="units" value="imperial" id="imperial">
+            <label for="imperial">&deg;F</label>
+        </div>
         <div id="credits">
             <p>Made with <span class="red">❤</span> in Romania</p>
             <p>Icons made by <a href="https://www.flaticon.com/authors/photo3idea-studio">photo3idea-studio</a>, 

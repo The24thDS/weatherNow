@@ -13,11 +13,11 @@ body{
     text-align: center;
     font-size: 3vmin;
     font-weight: bold;
-    user-select: none;
+    margin: 10px 0;
 }
 #details{
     display: grid;
-    grid-template-columns: 10vw 10vw;
+    grid-template-columns: 12vw 12vw;
     grid-template-rows: repeat(5, 1fr);
     grid-row-gap: 5px;
 }
@@ -101,17 +101,6 @@ header{
 #poweredby img{
     padding: 0 10px;
 }
-#pressure{
-    grid-column: span 2;
-}
-#pressure p{
-    justify-self: start;
-}
-#pressure img{
-    justify-self: end;
-    width: 50%;
-    height: 50%;
-}
 
 .red{
     color: red;
@@ -121,11 +110,6 @@ header{
     width: 50%;
     border: 2px solid rgba(0,0,0,.5);
     padding: 5px;
-}
-#searchbar::before{
-    content: 's';
-    position: absolute;
-    color: black;
 }
 section{
     display: grid;
@@ -144,9 +128,74 @@ section{
     font-weight: bold;
 }
 
+#units{
+    display: flex;
+    justify-self: start;
+}
+#units input{
+    display: none;
+}
+#units label{
+    display: inline-flex;
+    box-sizing: border-box;
+    width: 2vw;
+    height: 4vh;
+    margin: 0;
+    font-size: 2vmin;
+    align-items: center;
+    justify-content: center;
+    background: black;
+    color: white;
+    cursor: pointer;
+}
+#units input:checked + label{
+    background: white;
+    color: black;
+    box-shadow: black 2px 2px 10px 2px;
+}
+#units label[for=metric]{
+    border-radius: 10px 0 0 10px;
+}
+#units label[for=imperial]{
+    border-radius: 0 10px 10px 0;
+}
+#uv{
+    position: relative;
+}
+#uv p:hover + #info{
+    display: block;
+}
+#uv #info:hover{
+    display: block;
+}
+#uv #info {
+    position: absolute;
+    display: none;
+    left: 0;
+    top: 0;
+    width: 300%;
+    background: black;
+    padding: 20px;
+    border-radius: 30px;
+    border: 2px solid;
+    box-sizing: border-box;
+}
+#uv #info p{
+    font-size: 1.6vmin;
+    text-align: justify;
+    text-indent: 14px;
+}
+#uv #info p:first-child{
+    font-weight: bolder;
+}
+
+
 #weather{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+#weather h2, #weather h3{
+    margin: 0;
 }

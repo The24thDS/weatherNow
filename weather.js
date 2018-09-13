@@ -1,6 +1,8 @@
 const api = `a6825f71c27c7eeae7da4b299f840fc4`;
+let units = `metric`, place=``;
 const   weatherDiv = document.getElementById(`weather`);
         city = document.getElementById(`location`),
+        date = document.getElementById(`dt`),
         image = document.getElementById(`icon`),
         description = document.getElementById(`description`),
         temperature = document.querySelector(`#temperature > p`),
@@ -12,6 +14,8 @@ const   weatherDiv = document.getElementById(`weather`);
         visibility = document.querySelector(`#visibility > p`),
         cloudiness = document.querySelector(`#cloudiness > p`),
         pressure = document.querySelector(`#pressure > p`),
+        uv = document.querySelector(`#uv > p`),
+        uvInfo = document.querySelector(`#uv > #info`),
         searchBar = document.getElementById(`searchbar`),
         notFound = document.getElementById(`nope`);
 const icons = {
@@ -25,7 +29,14 @@ const icons = {
     clearN : "005-night.svg",
     cloudsD: "006-sunny.svg",
     cloudsN: "007-night-1.svg"
-}
+};
+const uvLevels = [
+    `<p>A UV Index reading of 0 to 2 means low danger from the sun's UV rays for the average person</p><p>>Wear sunglasses on bright days. If you burn easily, cover up and use broad spectrum SPF 30+ sunscreen. Bright surfaces, such as sand, water and snow, will increase UV exposure.</p>`,
+    `<p>A UV Index reading of 3 to 5 means moderate risk of harm from unprotected sun exposure.</p><p>Stay in shade near midday when the sun is strongest. If outdoors, wear sun protective clothing, a wide-brimmed hat, and UV-blocking sunglasses. Generously apply broad spectrum SPF 30+ sunscreen every 2 hours, even on cloudy days, and after swimming or sweating. Bright surfaces, such as sand, water and snow, will increase UV exposure.</p>`,
+    `<p>A UV Index reading of 6 to 7 means high risk of harm from unprotected sun exposure. Protection against skin and eye damage is needed.</p><p>Reduce time in the sun between 10 a.m. and 4 p.m. If outdoors, seek shade and wear sun protective clothing, a wide-brimmed hat, and UV-blocking sunglasses. Generously apply broad spectrum SPF 30+ sunscreen every 2 hours, even on cloudy days, and after swimming or sweating. Bright surfaces, such as sand, water and snow, will increase UV exposure.</p>`,
+    `<p>A UV Index reading of 8 to 10 means very high risk of harm from unprotected sun exposure. Take extra precautions because unprotected skin and eyes will be damaged and can burn quickly.</p><p>Minimize sun exposure between 10 a.m. and 4 p.m. If outdoors, seek shade and wear sun protective clothing, a wide-brimmed hat, and UV-blocking sunglasses. Generously apply broad spectrum SPF 30+ sunscreen every 2 hours, even on cloudy days, and after swimming or sweating. Bright surfaces, such as sand, water and snow, will increase UV exposure.</p>`,
+    `<p>A UV Index reading of 11 or more means extreme risk of harm from unprotected sun exposure. Take all precautions because unprotected skin and eyes can burn in minutes.</p><p>Try to avoid sun exposure between 10 a.m. and 4 p.m. If outdoors, seek shade and wear sun protective clothing, a wide-brimmed hat, and UV-blocking sunglasses. Generously apply broad spectrum SPF 30+ sunscreen every 2 hours, even on cloudy days, and after swimming or sweating. Bright surfaces, such as sand, water and snow, will increase UV exposure.</p>`
+]
 
 const humanTime = (unix) => {
     const date = new Date(unix*1000);
@@ -67,25 +78,26 @@ const weatherIcon = (cod, icon) => {
     return icons[Math.floor(cod/100)];
 }
 const fetchWeather = (query) => {
-    let units = `metric`;
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=${units}&appid=${api}`;
-    console.log(url);
-    fetch(url).then(result => result.json()).then(json => {
+    place = query;
+    let currentWeather = `https://api.openweathermap.org/data/2.5/weather?q=${place}&units=${units}&appid=${api}`;
+    let UVIndex = fetch(currentWeather).then(result => result.json()).then(json => {
         if(json.cod===200){
             weatherDiv.style.display = `flex`;
             nope.style.display = `none`;
             city.textContent = `${json.name}, ${json.sys.country}`;
+            dt.textContent = `as of ${humanTime(json.dt)}`;
             image.src = `icons/svg/${weatherIcon(json.weather[0].id, json.weather[0].icon[2])}`;
             description.textContent = json.weather[0].description;
-            temperature.innerHTML = `${json.main.temp} &deg;C`;
+            temperature.innerHTML = `${json.main.temp} ${units==="metric"?"&deg;C":"&deg;F"}`;
             humidity.textContent = `${json.main.humidity}%`;
             sunrise.textContent = humanTime(json.sys.sunrise);
             sunset.textContent = humanTime(json.sys.sunset);
-            wind.textContent = `${json.wind.speed} m/s`;
+            wind.textContent = `${json.wind.speed} ${units==="metric"?"m/s":"m/h"}`;
             direction.textContent = json.wind.deg ? degreeToCardinal(json.wind.deg): `no data`;
             visibility.textContent = json.visibility ? `${json.visibility} m` : `no data`;
             cloudiness.textContent = `${json.clouds.all}%`;
             pressure.textContent = `${json.main.pressure} hPa`;
+            return fetch(`http://api.openweathermap.org/data/2.5/uvi?appid=${api}&lat=${json.coord.lat}&lon=${json.coord.lon}`);
         }
         if(json.cod==="404")
         {
@@ -93,14 +105,39 @@ const fetchWeather = (query) => {
             nope.style.display = `flex`;
         }
     }).catch(console.log());
+    UVIndex.then(data => data.json()).then(uvdata => {
+        const value = uvdata.value;
+        uv.textContent = value;
+        if(value < 3)
+            {uv.style.color = uvInfo.style.borderColor = `green`;uvInfo.innerHTML = uvLevels[0];}
+            else if(value < 6)
+                {uv.style.color = uvInfo.style.borderColor = `yellow`;uvInfo.innerHTML = uvLevels[1];}
+                else if(value < 8)
+                    {uv.style.color = uvInfo.style.borderColor = `orange`;uvInfo.innerHTML = uvLevels[2];}
+                    else if(value < 11)
+                        {uv.style.color = uvInfo.style.borderColor = `red`;uvInfo.innerHTML = uvLevels[3];}
+                        else if(value >= 11)
+                            {uv.style.color = uvInfo.style.borderColor = `violet`;uvInfo.innerHTML = uvLevels[4];}
+    }).catch(console.log());
 }
 
 searchBar.addEventListener('keypress', (e) => {
     let key = e.which || e.keyCode;
     if (key === 13) {
-        console.log(e.target.value);
         fetchWeather(e.target.value);
+        e.target.value = ``;
     }
 });
 
+const setUnitsTriggers = () => {
+    const inputs = document.querySelectorAll(`#units input`);
+    inputs.forEach( input => {
+        input.addEventListener(`click`, (e) =>{
+            units = e.target.value;
+            fetchWeather(place);
+        })
+    })
+}
+
+setUnitsTriggers();
 fetchWeather("London");
