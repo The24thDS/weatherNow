@@ -97,7 +97,7 @@ const fetchWeather = (query) => {
             visibility.textContent = json.visibility ? `${json.visibility} m` : `no data`;
             cloudiness.textContent = `${json.clouds.all}%`;
             pressure.textContent = `${json.main.pressure} hPa`;
-            return fetch(`http://api.openweathermap.org/data/2.5/uvi?appid=${api}&lat=${json.coord.lat}&lon=${json.coord.lon}`);
+            return fetch(`https://api.openweathermap.org/data/2.5/uvi?appid=${api}&lat=${json.coord.lat}&lon=${json.coord.lon}`);
         }
         if(json.cod==="404")
         {
@@ -118,7 +118,11 @@ const fetchWeather = (query) => {
                         {uv.style.color = uvInfo.style.borderColor = `red`;uvInfo.innerHTML = uvLevels[3];}
                         else if(value >= 11)
                             {uv.style.color = uvInfo.style.borderColor = `violet`;uvInfo.innerHTML = uvLevels[4];}
-    }).catch(console.log());
+    });
+    const forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${place}&units=${units}&appid=${api}`;
+    fetch(forecast).then(result => result.json()).then(data => {
+        console.log(forecast);
+    });
 }
 
 searchBar.addEventListener('keypress', (e) => {
