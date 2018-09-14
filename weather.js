@@ -17,7 +17,8 @@ const   weatherDiv = document.getElementById(`weather`);
         uv = document.querySelector(`#uv > p`),
         uvInfo = document.querySelector(`#uv > #info`),
         searchBar = document.getElementById(`searchbar`),
-        notFound = document.getElementById(`nope`);
+        notFound = document.getElementById(`nope`),
+        loading = document.getElementById(`loader`);
 const icons = {
     2: "008-storm.svg",
     3: "016-drizzle.svg",
@@ -78,12 +79,14 @@ const weatherIcon = (cod, icon) => {
     return icons[Math.floor(cod/100)];
 }
 const fetchWeather = (query) => {
+    nope.style.display = weatherDiv.style.display = `none`;
+    loader.style.display = `flex`;
     place = query;
     let currentWeather = `https://api.openweathermap.org/data/2.5/weather?q=${place}&units=${units}&appid=${api}`;
     let UVIndex = fetch(currentWeather).then(result => result.json()).then(json => {
         if(json.cod===200){
             weatherDiv.style.display = `flex`;
-            nope.style.display = `none`;
+            nope.style.display = loader.style.display = `none`;
             city.textContent = `${json.name}, ${json.sys.country}`;
             dt.textContent = `as of ${humanTime(json.dt)}`;
             image.src = `icons/svg/${weatherIcon(json.weather[0].id, json.weather[0].icon[2])}`;
@@ -102,7 +105,7 @@ const fetchWeather = (query) => {
         if(json.cod==="404")
         {
             weatherDiv.style.display = `none`;
-            nope.style.display = `flex`;
+            nope.style.display = loader.style.display = `flex`;
         }
     }).catch(console.log());
     UVIndex.then(data => data.json()).then(uvdata => {

@@ -85,7 +85,7 @@ header{
     font-weight: bold;
 }
 
-#nope{
+#loader, #nope{
     display: none;
     grid-column: span 2;
     justify-content: center;
